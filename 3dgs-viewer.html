@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MV2 3DGS Viewer</title>
+<style>
+  :root {
+    --bg: #0c111e;
+    --panel: rgba(14, 20, 34, 0.82);
+    --ink: #eef4ff;
+    --muted: #9db1d3;
+    --accent: #78a7ff;
+    --rule: rgba(255, 255, 255, 0.14);
+  }
+  * { box-sizing: border-box; }
+  html,
+  body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: Inter, "Segoe UI", system-ui, -apple-system, sans-serif;
+  }
+  #viewer {
+    position: absolute;
+    inset: 0;
+  }
+  .hud {
+    position: fixed;
+    left: 16px;
+    top: 16px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    z-index: 4;
+    pointer-events: none;
+  }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 30px;
+    padding: 6px 10px;
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    background: var(--panel);
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    backdrop-filter: blur(8px);
+  }
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: #32c66a;
+    box-shadow: 0 0 0 3px rgba(50, 198, 106, 0.18);
+  }
+  .status {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 4;
+    max-width: min(360px, calc(100% - 32px));
+    padding: 10px 12px;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    background: var(--panel);
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.45;
+    backdrop-filter: blur(8px);
+  }
+  .status strong {
+    color: var(--ink);
+    font-weight: 700;
+  }
+  .status.error {
+    color: #ffd6d2;
+    border-color: rgba(255, 120, 102, 0.32);
+    background: rgba(60, 20, 24, 0.88);
+  }
+  canvas { display: block; }
+</style>
+</head>
+<body>
+<div id="viewer"></div>
+<div class="hud">
+  <span class="pill"><span class="dot"></span><span id="sceneLabel">3DGS</span></span>
+  <span class="pill" id="camLabel">V_C</span>
+</div>
+<div class="status" id="status"><strong>Loading</strong> preview splats</div>
+
+<script src="vendor/three-0.160.0.min.js"></script>
+<script src="vendor/gaussian-splats-3d-0.4.7.umd.js"></script>
+<script>
+(async () => {
+  const scenes = {
+    seq12: {
+      label: 'seq12 combined 3DGS',
+      path: 'assets/3dgs/seq12-all.ply',
+      scale: [1, 1, 1],
+      initialCamera: {
+        label: 'V_C · car image 040',
+        position: [0.031442, -0.211047, 0.002813],
+        lookAt: [0.014066, 0.58489, -0.075813],
+        up: [-0.041894, 0.097314, 0.994372],
+        frame: 40,
+      },
+    },
+    seq37: {
+      label: 'seq37 combined 3DGS',
+      path: 'assets/3dgs/seq37-all.ply',
+      scale: [1, 1, 1],
+      initialCamera: {
+        label: 'V_C · car image 040',
+        position: [0.009299, -0.169027, 0.003117],
+        lookAt: [-0.01719, 0.63033, -0.014942],
+        up: [-0.008349, 0.022309, 0.999716],
+        frame: 40,
+      },
+    },
+    seq46: {
+      label: 'seq46 combined 3DGS',
+      path: 'assets/3dgs/seq46-all.ply',
+      scale: [1, 1, 1],
+      initialCamera: {
+        label: 'V_C · car image 040',
+        position: [-0.018417, 0.049934, 0.001786],
+        lookAt: [-0.45979, 0.717156, -0.000286],
+        up: [-0.05959, -0.036321, 0.997562],
+        frame: 40,
+      },
+    },
+  };
+  const sceneAliases = {
+    seq012: 'seq12',
+    seq037: 'seq37',
+    seq046: 'seq46',
+    seq084: 'seq46',
+  };
+  const camLabels = {
+    V_C: 'V_C',
+    V_S: 'V_S',
+    V_D: 'V_D',
+    free: 'free',
+  };
+
+  const params = new URLSearchParams(window.location.search);
+  const requestedScene = params.get('scene') || 'seq12';
+  const sceneKey = scenes[requestedScene] ? requestedScene : (sceneAliases[requestedScene] || 'seq12');
+  const requestedCam = params.get('cam') || 'V_C';
+  const camKey = camLabels[requestedCam] ? requestedCam : 'V_C';
+  const scene = scenes[sceneKey];
+  const status = document.getElementById('status');
+  document.getElementById('sceneLabel').textContent = scene.label;
+
+  function fail(message) {
+    status.classList.add('error');
+    status.innerHTML = `<strong>Viewer unavailable</strong><br>${message}`;
+  }
+
+  const GaussianSplats3D = window.GaussianSplats3D || window['Gaussian Splats 3D'];
+  if (!window.THREE || !GaussianSplats3D) {
+    fail('The local viewer library did not load. Check the vendor files in website/vendor/.');
+    return;
+  }
+  if (window.location.protocol === 'file:') {
+    fail('Serve the website over http://localhost so the viewer can fetch the local PLY and JSON assets. Opening the HTML file directly blocks this in most browsers.');
+    return;
+  }
+
+  let poseMap = {};
+  try {
+    const poseResponse = await fetch('assets/3dgs/camera-poses.json?v=7');
+    if (poseResponse.ok) poseMap = await poseResponse.json();
+  } catch (error) {
+    poseMap = {};
+  }
+
+  const scenePose = poseMap[sceneKey] || {};
+  const preset = (scenePose.presets && scenePose.presets[camKey]) || scene.initialCamera;
+  const camera = preset || {
+    label: 'V_C · car image 040',
+    position: [0.35, -1.2, 0.35],
+    lookAt: [0, 0.4, 0],
+    up: [0, 0, 1],
+    frame: 40,
+    color: '#eef4ff',
+  };
+  document.getElementById('camLabel').textContent = camLabels[camKey];
+
+  function vec(values) {
+    return new THREE.Vector3(values[0], values[1], values[2]);
+  }
+
+  function buildPoseScene(poseData) {
+    const overlay = new THREE.Scene();
+    if (!poseData || !poseData.tracks) return overlay;
+    const allPoints = [];
+    Object.values(poseData.tracks).forEach(track => {
+      (track.points || []).forEach(point => allPoints.push(vec(point)));
+    });
+    const box = new THREE.Box3();
+    allPoints.forEach(point => box.expandByPoint(point));
+    const span = Math.max(0.04, box.getSize(new THREE.Vector3()).length());
+    const markerRadius = span * 0.012;
+    const frustumNear = span * 0.055;
+    const frustumDepth = span * 0.095;
+
+    Object.entries(poseData.tracks).forEach(([key, track]) => {
+      const points = (track.points || []).map(vec);
+      if (points.length > 1) {
+        const geometry = new THREE.BufferGeometry().setFromPoints(points);
+        const material = new THREE.LineBasicMaterial({
+          color: track.color || '#ffffff',
+          transparent: true,
+          opacity: 0.78,
+          depthTest: false,
+        });
+        overlay.add(new THREE.Line(geometry, material));
+      }
+    });
+
+    Object.entries(poseData.presets || {}).forEach(([key, preset]) => {
+      if (key === 'free') return;
+      const color = preset.color || '#ffffff';
+      const position = vec(preset.position);
+      const lookAt = vec(preset.lookAt);
+      const forward = lookAt.clone().sub(position).normalize();
+      let up = vec(preset.up || [0, -1, 0]).normalize();
+      let right = new THREE.Vector3().crossVectors(forward, up).normalize();
+      if (right.lengthSq() < 0.0001) right = new THREE.Vector3(1, 0, 0);
+      up = new THREE.Vector3().crossVectors(right, forward).normalize();
+      const center = position.clone().add(forward.clone().multiplyScalar(frustumDepth));
+      const c1 = center.clone().add(right.clone().multiplyScalar(frustumNear)).add(up.clone().multiplyScalar(frustumNear * 0.56));
+      const c2 = center.clone().add(right.clone().multiplyScalar(-frustumNear)).add(up.clone().multiplyScalar(frustumNear * 0.56));
+      const c3 = center.clone().add(right.clone().multiplyScalar(-frustumNear)).add(up.clone().multiplyScalar(-frustumNear * 0.56));
+      const c4 = center.clone().add(right.clone().multiplyScalar(frustumNear)).add(up.clone().multiplyScalar(-frustumNear * 0.56));
+      const lines = [
+        position, c1, position, c2, position, c3, position, c4,
+        c1, c2, c2, c3, c3, c4, c4, c1,
+      ];
+      const frustumGeometry = new THREE.BufferGeometry().setFromPoints(lines);
+      const frustumMaterial = new THREE.LineBasicMaterial({
+        color,
+        transparent: true,
+        opacity: 0.72,
+        depthTest: false,
+      });
+      overlay.add(new THREE.LineSegments(frustumGeometry, frustumMaterial));
+
+      const marker = new THREE.Mesh(
+        new THREE.SphereGeometry(markerRadius, 12, 8),
+        new THREE.MeshBasicMaterial({ color, depthTest: false })
+      );
+      marker.position.copy(position);
+      overlay.add(marker);
+    });
+    return overlay;
+  }
+
+  try {
+    const overlayScene = buildPoseScene(scenePose);
+    const viewer = new GaussianSplats3D.Viewer({
+      rootElement: document.getElementById('viewer'),
+      threeScene: overlayScene,
+      cameraUp: camera.up || [0, 0, 1],
+      initialCameraPosition: camera.position,
+      initialCameraLookAt: camera.lookAt,
+      sharedMemoryForWorkers: false,
+      gpuAcceleratedSort: false,
+      integerBasedSort: false,
+    });
+
+    viewer.addSplatScene(scene.path, {
+      splatAlphaRemovalThreshold: 3,
+      showLoadingUI: true,
+      progressiveLoad: true,
+      position: [0, 0, 0],
+      rotation: [0, 0, 0, 1],
+      scale: scene.scale,
+    }).then(() => {
+      const frame = camera.frame !== undefined ? `frame ${String(camera.frame).padStart(3, '0')}` : 'pose preset';
+      status.innerHTML = `<strong>${sceneKey}</strong> loaded as one combined PLY · initial ${camera.label} (${frame})`;
+      viewer.start();
+    }).catch(error => {
+      fail(error && error.message ? error.message : 'Could not load the splat PLY file.');
+    });
+  } catch (error) {
+    fail(error && error.message ? error.message : 'Could not initialize the WebGL viewer.');
+  }
+})();
+</script>
+</body>
+</html>

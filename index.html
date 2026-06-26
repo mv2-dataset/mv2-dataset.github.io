@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MV² — Multi-View Multi-Vehicle Driving Dataset for Novel View Synthesis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Raleway:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=4">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <div class="affil-logos">
+      <a class="affil-logo" href="https://www.iiit.ac.in/" target="_blank" rel="noopener" title="IIIT Hyderabad">
+        <svg viewBox="0 0 140 36" width="140" height="36" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="6" width="24" height="24" rx="3" fill="#2c5fb8"/>
+          <text x="14" y="23" text-anchor="middle" font-family="Raleway" font-size="11" font-weight="700" fill="white">IIIT</text>
+          <text x="32" y="17" font-family="Raleway" font-size="11" font-weight="700" fill="#1a1f2e">IIIT Hyderabad</text>
+          <text x="32" y="29" font-family="Open Sans" font-size="8" fill="#5a6378">Centre for Visual Information Technology</text>
+        </svg>
+      </a>
+      <a class="affil-logo" href="https://cvit.iiit.ac.in/" target="_blank" rel="noopener" title="CVIT">
+        <svg viewBox="0 0 90 36" width="90" height="36" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="14" cy="18" r="11" fill="none" stroke="#2c5fb8" stroke-width="2"/>
+          <circle cx="14" cy="18" r="4" fill="#2c5fb8"/>
+          <text x="30" y="17" font-family="Raleway" font-size="11" font-weight="700" fill="#1a1f2e">CVIT</text>
+          <text x="30" y="29" font-family="Open Sans" font-size="8" fill="#5a6378">Vision &amp; Graphics</text>
+        </svg>
+      </a>
+    </div>
+
+    <div class="site-header-spacer"></div>
+
+    <nav class="header-links">
+      <a class="header-link" href="#about">Paper</a>
+      <a class="header-link" href="https://example.com/mv2-dataset" target="_blank" rel="noopener">Dataset</a>
+      <a class="header-link" href="https://github.com/example/mv2-benchmark" target="_blank" rel="noopener">Code</a>
+      <a class="header-link" href="#viewer">Demo</a>
+      <a class="header-link browse" href="#benchmark">Benchmark</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <span class="hero-acronym">MV<sup>2</sup></span>
+    <h1>Multi-View Multi-Vehicle Driving Dataset <span class="light">for Novel View Synthesis</span></h1>
+    <p class="hero-tagline">A real-world benchmark for evaluating novel view synthesis under large viewpoint changes in dynamic driving scenes. MV<sup>2</sup> records the same outdoor scene from a car, a two-wheeler, and a drone, enabling train-on-one-platform and test-on-another evaluation.</p>
+    <p class="hero-authors">Sanjay Bhargav Dharavath · Hanvitha Saraswathi Mukkamala · Faizan Farooq Khan · Ioannis Kakogeorgiou · Aditya Arun · Zakaria Laskar · C.V. Jawahar</p>
+    <p class="hero-affil">Centre for Visual Information Technology, IIIT Hyderabad</p>
+
+    <div class="hero-actions">
+      <a class="hero-explore" href="#about">Overview</a>
+      <a class="hero-explore hero-explore-secondary" href="https://example.com/mv2-dataset" target="_blank" rel="noopener">Dataset</a>
+      <a class="hero-explore hero-explore-secondary" href="https://github.com/example/mv2-benchmark" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</section>
+
+<section class="tldr-strip">
+  <div class="wrap">
+    <div class="tldr-grid">
+      <div class="tldr-cell">
+        <div class="tldr-num">50</div>
+        <div class="tldr-lab">Pose-verified scenes</div>
+        <div class="tldr-help">retained from 200 recorded sequences</div>
+      </div>
+      <div class="tldr-cell">
+        <div class="tldr-num">12K</div>
+        <div class="tldr-lab">Calibrated images</div>
+        <div class="tldr-help">1080×1920 · 60 FPS · sampled to 2 FPS</div>
+      </div>
+      <div class="tldr-cell">
+        <div class="tldr-num">3</div>
+        <div class="tldr-lab">Platforms</div>
+        <div class="tldr-help">car · two-wheeler · drone</div>
+      </div>
+      <div class="tldr-cell">
+        <div class="tldr-num">2</div>
+        <div class="tldr-lab">Evaluation setups</div>
+        <div class="tldr-help">Eval-Car-Train and Eval-Drone-Train</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="samples-section" id="samples">
+  <div class="wrap">
+    <div class="samples-head">
+      <h2 class="section-title">Dataset samples</h2>
+      <p class="section-sub">Synchronized frame triplets from the same timestamp across the car, two-wheeler, and drone capture platforms.</p>
+    </div>
+
+    <div class="samples-toolbar">
+      <span class="samples-label">scene</span>
+      <div class="samples-tabs" id="sceneTabs">
+        <button class="samples-tab active" data-scene="seq10">seq10</button>
+        <button class="samples-tab" data-scene="seq12">seq12</button>
+        <button class="samples-tab" data-scene="seq37">seq37</button>
+      </div>
+      <span class="samples-spacer"></span>
+      <span class="samples-meta" id="sceneMeta">frame 000010 · car + scooty + drone synchronized</span>
+    </div>
+
+    <div class="samples-grid" id="samplesGrid">
+      <figure class="sample-tile" data-platform="V_C">
+        <div class="sample-frame">
+          <img data-sample="car" src="assets/images/seq10_car_front_000010.jpg" alt="seq10 car forward frame 000010" loading="lazy">
+        </div>
+        <figcaption><span class="sample-cap-name">V<sub>C</sub> · car front</span><span class="sample-cap-meta">frame 000010 · training stream</span></figcaption>
+      </figure>
+
+      <figure class="sample-tile" data-platform="V_S">
+        <div class="sample-frame">
+          <img data-sample="scooty" src="assets/images/seq10_scooty_front_000010.jpg" alt="seq10 scooty forward frame 000010" loading="lazy">
+        </div>
+        <figcaption><span class="sample-cap-name">V<sub>S</sub> · scooty front</span><span class="sample-cap-meta">frame 000010 · cross-vehicle view</span></figcaption>
+      </figure>
+
+      <figure class="sample-tile" data-platform="V_D">
+        <div class="sample-frame">
+          <img data-sample="drone" src="assets/images/seq10_drone_000010.jpg" alt="seq10 drone frame 000010" loading="lazy">
+        </div>
+        <figcaption><span class="sample-cap-name">V<sub>D</sub> · drone</span><span class="sample-cap-meta">frame 000010 · aerial stream</span></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="about">
+  <div class="wrap">
+    <h2 class="section-title">Why MV<sup>2</sup>?</h2>
+    <p class="section-sub">Most driving NVS benchmarks test interpolation along the same vehicle trajectory. MV<sup>2</sup> instead measures cross-platform extrapolation: train on one moving platform and render from another.</p>
+
+    <div class="cards-grid">
+      <div class="card">
+        <h3 class="card-title">Real multi-platform capture</h3>
+        <p class="card-desc">A car, a two-wheeler, and a drone observe the same dynamic outdoor scene from independent synchronized trajectories.</p>
+        <div class="card-chips"><span class="chip">real-world</span><span class="chip">dynamic</span></div>
+      </div>
+      <div class="card">
+        <h3 class="card-title">Cross-view evaluation</h3>
+        <p class="card-desc">Models are trained on one platform and evaluated on another, exposing failures hidden by same-trajectory test splits.</p>
+        <div class="card-chips"><span class="chip">T<sub>C→S</sub></span><span class="chip">T<sub>D→C</sub></span></div>
+      </div>
+      <div class="card">
+        <h3 class="card-title">Pose-verified benchmark</h3>
+        <p class="card-desc">COLMAP poses are filtered with manual region annotations, dense RoMA correspondences, and epipolar consistency checks.</p>
+        <div class="card-chips"><span class="chip">SfM</span><span class="chip">e<sub>m</sub> ≤ 30 px</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="protocol">
+  <div class="wrap">
+    <h2 class="section-title">Dataset construction</h2>
+    <p class="section-sub">A short version of the capture and filtering protocol used in the paper.</p>
+
+    <div class="pipeline compact-pipeline">
+      <div class="pipeline-step">
+        <div class="pipeline-num">1</div>
+        <h4>Capture</h4>
+        <p>GoPro 10 cameras mounted on a car, two-wheeler, and drone capture synchronized 1080×1920 videos at 60 FPS.</p>
+        <div class="pipeline-meta">car · two-wheeler · drone</div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-num">2</div>
+        <h4>Segment</h4>
+        <p>Videos are sampled at 2 FPS and split into 100-frame segments. Congested, tunnel, red-light, and poorly aligned segments are removed.</p>
+        <div class="pipeline-meta">200 candidates</div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-num">3</div>
+        <h4>Register</h4>
+        <p>Training sequences are reconstructed with COLMAP. Test images are localized using the nearest training images.</p>
+        <div class="pipeline-meta">single world frame</div>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-num">4</div>
+        <h4>Verify</h4>
+        <p>Relative poses are accepted only when the maximum epipolar error over annotated correspondences is at most 30 pixels.</p>
+        <div class="pipeline-meta">50 final scenes</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="splits">
+  <div class="wrap">
+    <h2 class="section-title">Evaluation protocol</h2>
+    <p class="section-sub">A split name T<sub>X→Y</sub> means the model is trained on platform X and rendered/evaluated from platform Y.</p>
+
+    <div class="splits-grid">
+      <div class="split-card setup-car">
+        <div class="split-header">
+          <span class="split-tag">Eval-Car-Train</span>
+          <span class="split-train">train: V<sub>C</sub></span>
+        </div>
+        <div class="split-rows">
+          <div class="split-row"><span class="split-name">T<sub>C→C</sub></span><span class="split-help">same car trajectory; closest to conventional NVS interpolation</span></div>
+          <div class="split-row"><span class="split-name">T<sub>C→L</sub></span><span class="split-help">left car-mounted camera; small lateral baseline</span></div>
+          <div class="split-row"><span class="split-name">T<sub>C→S</sub></span><span class="split-help">two-wheeler trajectory; cross-vehicle generalization</span></div>
+        </div>
+      </div>
+
+      <div class="split-card setup-drone">
+        <div class="split-header">
+          <span class="split-tag drone">Eval-Drone-Train</span>
+          <span class="split-train">train: V<sub>D</sub></span>
+        </div>
+        <div class="split-rows">
+          <div class="split-row"><span class="split-name">T<sub>D→D</sub></span><span class="split-help">same drone trajectory; aerial interpolation</span></div>
+          <div class="split-row"><span class="split-name">T<sub>D→C</sub></span><span class="split-help">drone-to-car rendering; aerial-to-ground gap</span></div>
+          <div class="split-row"><span class="split-name">T<sub>D→S</sub></span><span class="split-help">drone-to-two-wheeler rendering; cross-platform gap</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="findings">
+  <div class="wrap">
+    <h2 class="section-title">Key findings</h2>
+    <p class="section-sub">The page keeps only the main conclusions needed for a project website.</p>
+
+    <div class="findings-grid findings-grid-compact">
+      <article class="finding">
+        <div class="finding-num">01</div>
+        <h3>Viewpoint gap hurts NVS</h3>
+        <p>Performance consistently drops as the test viewpoint moves away from the training trajectory, especially from T<sub>C→C</sub> to T<sub>C→S</sub>.</p>
+      </article>
+      <article class="finding">
+        <div class="finding-num">02</div>
+        <h3>One extra car camera is not enough</h3>
+        <p>T<sub>C→L</sub> introduces only a small baseline. T<sub>C→S</sub> is the more realistic cross-vehicle test.</p>
+      </article>
+      <article class="finding">
+        <div class="finding-num">03</div>
+        <h3>Aerial-to-ground is difficult</h3>
+        <p>Training on drone images and rendering ground views causes a large degradation for both static and dynamic NVS methods.</p>
+      </article>
+      <article class="finding">
+        <div class="finding-num">04</div>
+        <h3>Pose estimation remains open</h3>
+        <p>Feed-forward pose estimators trail COLMAP under wide-baseline cross-platform localization.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="benchmark">
+  <div class="wrap">
+    <h2 class="section-title">Benchmark</h2>
+    <p class="section-sub">Interactive table using the paper's main NVS results. Use tabs to switch training platforms; PSNR/SSIM higher is better and LPIPS lower is better.</p>
+
+    <div class="bench-tabs" id="benchTabs">
+      <button class="bench-tab active" data-tab="car">Eval-Car-Train</button>
+      <button class="bench-tab" data-tab="drone">Eval-Drone-Train</button>
+    </div>
+
+    <div class="bench-table-wrap">
+      <div class="bench-toolbar">
+        <label>Family
+          <select id="filterFam"><option value="all">all</option></select>
+        </label>
+        <label>Test set
+          <select id="filterTe"><option value="all">all</option></select>
+        </label>
+        <label>Search
+          <input type="text" id="filterSearch" placeholder="method name…"/>
+        </label>
+        <span class="bench-toolbar-spacer"></span>
+        <span class="bench-count" id="benchCount">— entries</span>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="bench-table" id="benchTable">
+          <thead></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <p class="bench-footnote">Table values are copied from the main paper. Feed-forward methods use 12 context views; 2-view and 6-view ablations can be added later if needed.</p>
+  </div>
+</section>
+
+<section class="section section-alt" id="viewer">
+  <div class="wrap">
+    <h2 class="section-title">Demo placeholder</h2>
+    <p class="section-sub">Keep this block as a placeholder until the hosted viewer or video demo is ready.</p>
+
+    <div class="viewer-shell">
+      <div class="viewer-toolbar">
+        <span class="viewer-tag"><span class="viewer-dot"></span> demo placeholder</span>
+        <div class="viewer-tab-group" id="viewerTabs">
+          <button class="viewer-tab active" data-vscene="seq10">seq10</button>
+          <button class="viewer-tab" data-vscene="seq12">seq12</button>
+          <button class="viewer-tab" data-vscene="seq37">seq37</button>
+        </div>
+        <span class="viewer-spacer"></span>
+        <a class="header-link" href="https://example.com/mv2-viewer" target="_blank" rel="noopener">Open hosted demo</a>
+      </div>
+      <div class="viewer-stage">
+        <div class="viewer-placeholder">
+          <svg class="viewer-axis" viewBox="0 0 900 420" xmlns="http://www.w3.org/2000/svg">
+            <defs><pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="1"/></pattern></defs>
+            <rect width="900" height="420" fill="url(#grid)"/>
+            <path d="M120 300 C260 210, 360 240, 500 160 S720 130, 790 78" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="3" stroke-dasharray="8 8"/>
+            <circle cx="120" cy="300" r="8" fill="#79b8ff"/><circle cx="500" cy="160" r="8" fill="#f9c75c"/><circle cx="790" cy="78" r="8" fill="#ff8a80"/>
+          </svg>
+          <div class="viewer-overlay">
+            <div class="viewer-overlay-card">
+              <div class="viewer-overlay-eyebrow">MV² Viewer</div>
+              <h3>Interactive reconstruction preview</h3>
+              <p>The interactive demo will land here once the hosted viewer is ready. The scene toggle already tracks the showcase sequences on this page.</p>
+              <div class="viewer-snippet">current scene: <span id="rvScene">seq10</span> · camera: <span id="rvCam">free orbit</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="viewer-note">Hosted interactive viewer link: <code>https://example.com/mv2-viewer</code></p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="downloads">
+  <div class="wrap">
+    <h2 class="section-title">Resources</h2>
+    <p class="section-sub">Dataset, code, and paper entry points for the MV<sup>2</sup> release.</p>
+
+    <div class="cards-grid resources-grid">
+      <div class="card">
+        <h3 class="card-title">Dataset</h3>
+        <p class="card-desc">Train/test lists, calibrated images, camera poses, and correspondence annotations for the benchmark release.</p>
+        <a class="contact-cta" href="https://example.com/mv2-dataset" target="_blank" rel="noopener">Dataset link</a>
+      </div>
+      <div class="card" id="code">
+        <h3 class="card-title">Code</h3>
+        <p class="card-desc">Evaluation scripts, split readers, metric computation, and baseline configuration files.</p>
+        <a class="contact-cta" href="https://github.com/example/mv2-benchmark" target="_blank" rel="noopener">GitHub repo</a>
+      </div>
+      <div class="card">
+        <h3 class="card-title">Paper</h3>
+        <p class="card-desc">Paper PDF and supplementary material for the ECCV release.</p>
+        <a class="contact-cta" href="https://arxiv.org/abs/0000.00000" target="_blank" rel="noopener">Paper link</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="cite">
+  <div class="wrap">
+    <h2 class="section-title">Citation</h2>
+    <!-- <p class="section-sub">Citation block for the MV<sup>2</sup> paper.</p>
+    <pre class="citation-block"><button class="copy-btn" id="copyBib">copy</button><code id="bib"><span class="at">@inproceedings</span>{<span class="key">mv2_2026</span>,
+  <span class="key">title</span> = {<span class="val">MV2: Multi-View Multi-Vehicle Driving Dataset for Novel View Synthesis</span>},
+  <span class="key">author</span> = {<span class="val">Dharavath, Sanjay Bhargav and Mukkamala, Hanvitha Saraswathi and Khan, Faizan Farooq and Kakogeorgiou, Ioannis and Arun, Aditya and Laskar, Zakaria and Jawahar, C. V.</span>},
+  <span class="key">booktitle</span> = {<span class="val">ECCV</span>},
+  <span class="key">year</span> = {<span class="val">2026</span>} -->
+<!-- }</code></pre> -->
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-cc">MV<sup>2</sup> · Centre for Visual Information Technology, IIIT Hyderabad</div>
+    <p class="footer-meta">Project page for the MV<sup>2</sup> dataset, benchmark, and interactive preview.</p>
+  </div>
+</footer>
+
+<script src="scripts.js?v=4"></script>
+</body>
+</html>
