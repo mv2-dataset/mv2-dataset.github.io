@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MV² 3DGS Viewer - Interactive Demo</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #0c111e 0%, #1a1f2e 100%);
+    color: #eef4ff;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    line-height: 1.6;
+  }
+  
+  .page {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+  }
+  
+  .page.active {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Scene Grid Page */
+  .scenes-page {
+    flex-direction: column;
+  }
+  
+  .scenes-page.active {
+    display: flex;
+  }
+  
+  header {
+    background: rgba(14, 20, 34, 0.9);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(120, 167, 255, 0.2);
+    padding: 30px 40px;
+    text-align: center;
+  }
+  
+  h1 {
+    margin: 0 0 8px 0;
+    font-size: 2em;
+    background: linear-gradient(135deg, #78a7ff, #a8c5ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .tagline {
+    color: #9db1d3;
+    margin: 0;
+  }
+  
+  .content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 40px;
+  }
+  
+  .scenes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .scene-card {
+    background: rgba(14, 20, 34, 0.6);
+    border: 1px solid rgba(120, 167, 255, 0.3);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .scene-card:hover {
+    border-color: rgba(120, 167, 255, 0.6);
+    background: rgba(14, 20, 34, 0.8);
+    box-shadow: 0 8px 24px rgba(120, 167, 255, 0.15);
+    transform: translateY(-2px);
+  }
+  
+  .scene-preview {
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(135deg, rgba(120, 167, 255, 0.1), rgba(168, 197, 255, 0.1));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3em;
+    border-bottom: 1px solid rgba(120, 167, 255, 0.2);
+  }
+  
+  .scene-info {
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .scene-title {
+    font-size: 1.3em;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    color: #eef4ff;
+  }
+  
+  .scene-desc {
+    font-size: 0.9em;
+    color: #9db1d3;
+    margin: 0 0 12px 0;
+    flex: 1;
+  }
+  
+  .scene-cameras {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+  
+  .camera-tag {
+    background: rgba(120, 167, 255, 0.15);
+    border: 1px solid rgba(120, 167, 255, 0.3);
+    color: #78a7ff;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: 500;
+  }
+  
+  .view-buttons {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .btn {
+    flex: 1;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    text-align: center;
+    display: inline-block;
+  }
+  
+  .btn-primary {
+    background: linear-gradient(135deg, #78a7ff, #a8c5ff);
+    color: #0c111e;
+  }
+  
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(120, 167, 255, 0.3);
+  }
+  
+  .btn-secondary {
+    background: rgba(120, 167, 255, 0.15);
+    color: #78a7ff;
+    border: 1px solid rgba(120, 167, 255, 0.3);
+  }
+  
+  .btn-secondary:hover {
+    background: rgba(120, 167, 255, 0.25);
+  }
+  
+  /* Viewer Page */
+  .viewer-page {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    display: none;
+    pointer-events: none;
+  }
+  
+  .viewer-page.active {
+    display: block;
+    pointer-events: auto;
+  }
+  
+  #viewer {
+    position: absolute;
+    inset: 0;
+  }
+  
+  .viewer-hud {
+    position: fixed;
+    left: 16px;
+    top: 16px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    z-index: 4;
+    pointer-events: none;
+  }
+  
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 30px;
+    padding: 6px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 5px;
+    background: rgba(14, 20, 34, 0.82);
+    color: #9db1d3;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    backdrop-filter: blur(8px);
+  }
+  
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: #32c66a;
+    box-shadow: 0 0 0 3px rgba(50, 198, 106, 0.18);
+  }
+  
+  .viewer-controls {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    display: flex;
+    gap: 8px;
+    z-index: 4;
+  }
+  
+  .control-btn {
+    background: rgba(14, 20, 34, 0.82);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: #78a7ff;
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(8px);
+    transition: all 0.2s;
+  }
+  
+  .control-btn:hover {
+    background: rgba(14, 20, 34, 0.95);
+    border-color: rgba(120, 167, 255, 0.5);
+  }
+  
+  .status {
+    position: fixed;
+    right: 16px;
+    bottom: 70px;
+    z-index: 4;
+    max-width: 360px;
+    padding: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 6px;
+    background: rgba(14, 20, 34, 0.82);
+    color: #9db1d3;
+    font-size: 12px;
+    line-height: 1.45;
+    backdrop-filter: blur(8px);
+  }
+  
+  .status strong {
+    color: #eef4ff;
+  }
+  
+  .status.error {
+    color: #ffd6d2;
+    border-color: rgba(255, 120, 102, 0.32);
+    background: rgba(60, 20, 24, 0.88);
+  }
+  
+  .camera-selector {
+    position: fixed;
+    left: 16px;
+    bottom: 16px;
+    background: rgba(14, 20, 34, 0.82);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 6px;
+    backdrop-filter: blur(8px);
+    z-index: 4;
+  }
+  
+  .camera-selector label {
+    display: block;
+    padding: 8px 12px;
+    font-size: 12px;
+    color: #9db1d3;
+    font-weight: 600;
+    margin: 0;
+  }
+  
+  .camera-selector select {
+    display: block;
+    width: 100%;
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    color: #78a7ff;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  
+  canvas { display: block; }
+  
+  footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(14, 20, 34, 0.9);
+    border-top: 1px solid rgba(120, 167, 255, 0.2);
+    padding: 12px;
+    text-align: center;
+    color: #9db1d3;
+    font-size: 0.85em;
+  }
+  
+  @media (max-width: 600px) {
+    header { padding: 20px; }
+    h1 { font-size: 1.4em; }
+    .scenes-grid { grid-template-columns: 1fr; }
+    .content { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Scenes Directory Page -->
+<div class="scenes-page active">
+  <header>
+    <h1>MV² 3DGS Viewer</h1>
+    <p class="tagline">Interactive Gaussian Splatting scenes from the MV² dataset</p>
+  </header>
+  
+  <div class="content">
+    <div class="scenes-grid">
+      <!-- Seq 12 -->
+      <div class="scene-card" onclick="APP.launchScene('seq12', 'V_C')">
+        <div class="scene-preview">🏙️</div>
+        <div class="scene-info">
+          <h3 class="scene-title">Seq 12 - Urban Scene</h3>
+          <p class="scene-desc">Multi-platform 3DGS reconstruction of an urban environment with traffic. Captured from car, two-wheeler, and drone.</p>
+          <div class="scene-cameras">
+            <span class="camera-tag">V_C (Car)</span>
+            <span class="camera-tag">V_S (Scooty)</span>
+            <span class="camera-tag">V_D (Drone)</span>
+          </div>
+          <div class="view-buttons">
+            <span class="btn btn-primary">View in 3D</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Seq 37 -->
+      <div class="scene-card" onclick="APP.launchScene('seq37', 'V_C')">
+        <div class="scene-preview">🛣️</div>
+        <div class="scene-info">
+          <h3 class="scene-title">Seq 37 - Highway Scene</h3>
+          <p class="scene-desc">3DGS reconstruction of a highway environment with high-speed motion. Multi-view capture with large baseline variations.</p>
+          <div class="scene-cameras">
+            <span class="camera-tag">V_C (Car)</span>
+            <span class="camera-tag">V_S (Scooty)</span>
+            <span class="camera-tag">V_D (Drone)</span>
+          </div>
+          <div class="view-buttons">
+            <span class="btn btn-primary">View in 3D</span>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+  <footer>
+    <strong>Camera Views:</strong> V_C = Car Front · V_S = Scooty/Two-wheeler · V_D = Drone Aerial | 
+    <strong>Controls:</strong> Click+drag to rotate · Scroll to zoom · Right-click to pan
+  </footer>
+</div>
+
+<!-- 3DGS Viewer Page -->
+<div class="viewer-page" id="viewerPage">
+  <div id="viewer"></div>
+  <div class="viewer-hud">
+    <span class="pill"><span class="dot"></span><span id="sceneLabel">3DGS</span></span>
+    <span class="pill" id="camLabel">V_C</span>
+  </div>
+  
+  <div class="camera-selector">
+    <label for="cameraSelect">Camera:</label>
+    <select id="cameraSelect">
+      <option value="V_C">Car (V_C)</option>
+      <option value="V_S">Scooty (V_S)</option>
+      <option value="V_D">Drone (V_D)</option>
+      <option value="free">Free Camera</option>
+    </select>
+  </div>
+  
+  <div class="viewer-controls">
+    <button class="control-btn" id="homeBtn" title="Reset Camera">⌂</button>
+    <button class="control-btn" id="backBtn" title="Back to Scenes">←</button>
+  </div>
+  
+  <div class="status" id="status"><strong>Loading</strong> splats...</div>
+</div>
+
+<script src="vendor/three-0.160.0.min.js"></script>
+<script src="vendor/gaussian-splats-3d-0.4.7.umd.js"></script>
+
+<script>
+const APP = {
+  currentScene: null,
+  currentCam: null,
+  viewer: null,
+  scenes: {
+    seq12: {
+      label: 'seq12 combined 3DGS',
+      path: 'assets/3dgs/seq12-all.ply',
+      scale: [1, 1, 1],
+    },
+    seq37: {
+      label: 'seq37 combined 3DGS',
+      path: 'assets/3dgs/seq37-all.ply',
+      scale: [1, 1, 1],
+    },
+  },
+  sceneAliases: {
+    seq012: 'seq12',
+    seq037: 'seq37',
+  },
+  camLabels: {
+    V_C: 'V_C (Car)',
+    V_S: 'V_S (Scooty)',
+    V_D: 'V_D (Drone)',
+    free: 'Free',
+  },
+  poseMap: {},
+  
+  async init() {
+    const params = new URLSearchParams(window.location.search);
+    this.currentScene = params.get('scene') || null;
+    this.currentCam = params.get('cam') || 'V_C';
+    
+    if (this.currentScene && this.scenes[this.currentScene]) {
+      this.showViewer();
+      await this.loadScene();
+    }
+  },
+  
+  launchScene(scene, cam) {
+    this.currentScene = scene;
+    this.currentCam = cam || this.currentCam || 'V_C';
+    this.showViewer();
+    this.loadScene();
+  },
+  
+  showViewer() {
+    document.querySelector('.scenes-page').classList.remove('active');
+    document.getElementById('viewerPage').classList.add('active');
+  },
+  
+  showScenes() {
+    if (this.viewer) {
+      this.viewer.dispose?.();
+    }
+    document.querySelector('.scenes-page').classList.add('active');
+    document.getElementById('viewerPage').classList.remove('active');
+  },
+  
+  async loadScene() {
+    const sceneKey = this.sceneAliases[this.currentScene] || this.currentScene;
+    const scene = this.scenes[sceneKey];
+    
+    if (!scene) {
+      this.fail('Scene not found: ' + this.currentScene);
+      return;
+    }
+    
+    const status = document.getElementById('status');
+    document.getElementById('sceneLabel').textContent = scene.label;
+    document.getElementById('cameraSelect').value = this.currentCam;
+
+    if (window.location.protocol === 'file:') {
+      this.fail('Open the site through http://127.0.0.1:8000 so the viewer can fetch local PLY assets. Browsers block these asset requests from file:// pages.');
+      return;
+    }
+    
+    // Load camera poses if not already loaded
+    if (!this.poseMap[sceneKey]) {
+      try {
+        const response = await fetch('assets/3dgs/camera-poses.json');
+        if (response.ok) {
+          this.poseMap = await response.json();
+        }
+      } catch (e) {}
+    }
+    
+    const GaussianSplats3D = window.GaussianSplats3D || window['Gaussian Splats 3D'];
+    if (!window.THREE || !GaussianSplats3D) {
+      this.fail('Viewer libraries not loaded');
+      return;
+    }
+    
+    const scenePose = this.poseMap[sceneKey] || {};
+    const track = scenePose.tracks && scenePose.tracks[this.currentCam];
+    const preset = (scenePose.presets && scenePose.presets[this.currentCam]) || {
+      label: 'Default camera',
+      position: [0.35, -1.2, 0.35],
+      lookAt: [0, 0.4, 0],
+      up: [0, 0, 1],
+    };
+    
+    // Use middle pose from trajectory for initial viewpoint
+    let camera = { ...preset, label: this.camLabels[this.currentCam] || preset.label };
+    if (track && track.points && track.points.length > 0) {
+      const midIdx = Math.floor(track.points.length / 2);
+      const midPoint = track.points[midIdx];
+      const prevPoint = track.points[Math.max(0, midIdx - 1)];
+      const nextPoint = track.points[Math.min(track.points.length - 1, midIdx + 1)];
+      const direction = [nextPoint[0] - prevPoint[0], nextPoint[1] - prevPoint[1], nextPoint[2] - prevPoint[2]];
+      const len = Math.sqrt(direction[0]*direction[0] + direction[1]*direction[1] + direction[2]*direction[2]);
+      if (len > 0) {
+        camera.lookAt = [midPoint[0] + direction[0]/len * 0.1, midPoint[1] + direction[1]/len * 0.1, midPoint[2] + direction[2]/len * 0.1];
+      }
+      camera.position = midPoint;
+    }
+    
+    document.getElementById('camLabel').textContent = this.camLabels[this.currentCam] || 'Camera';
+    
+    try {
+      // If viewer already exists, dispose it and reload
+      if (this.viewer) {
+        this.viewer.dispose?.();
+        this.viewer = null;
+      }
+      
+      const overlayScene = this.buildPoseScene(scenePose);
+      this.viewer = new GaussianSplats3D.Viewer({
+        rootElement: document.getElementById('viewer'),
+        threeScene: new THREE.Scene(),
+        cameraUp: camera.up || [0, 0, 1],
+        initialCameraPosition: camera.position,
+        initialCameraLookAt: camera.lookAt,
+        sharedMemoryForWorkers: false,
+        gpuAcceleratedSort: false,
+        integerBasedSort: false,
+      });
+      
+      this.initialCameraState = {
+        position: camera.position,
+        lookAt: camera.lookAt,
+        up: camera.up || [0, 0, 1],
+      };
+      this.renderOverlayAfterSplats(overlayScene);
+      
+      await this.viewer.addSplatScene(scene.path, {
+        splatAlphaRemovalThreshold: 3,
+        showLoadingUI: true,
+        progressiveLoad: true,
+        position: [0, 0, 0],
+        rotation: [0, 0, 0, 1],
+        scale: scene.scale,
+      });
+      
+      status.innerHTML = `<strong>${sceneKey}</strong> loaded · Camera: <strong>${camera.label}</strong>`;
+      this.viewer.start();
+    } catch (error) {
+      this.fail(error?.message || 'Failed to load splat');
+    }
+  },
+
+  renderOverlayAfterSplats(overlayScene) {
+    if (!this.viewer || !overlayScene) return;
+
+    const viewer = this.viewer;
+    const originalRender = viewer.render.bind(viewer);
+    viewer.render = () => {
+      originalRender();
+
+      if (!viewer.initialized || !viewer.splatRenderReady || viewer.isDisposingOrDisposed?.()) return;
+      if (!viewer.renderer || !viewer.camera || overlayScene.children.length === 0) return;
+
+      const savedAutoClear = viewer.renderer.autoClear;
+      viewer.renderer.autoClear = false;
+      viewer.renderer.clearDepth();
+      viewer.renderer.render(overlayScene, viewer.camera);
+      viewer.renderer.autoClear = savedAutoClear;
+    };
+  },
+  
+  buildPoseScene(poseData) {
+    const overlay = new THREE.Scene();
+    if (!poseData || !poseData.tracks) return overlay;
+    
+    const vec = (v) => new THREE.Vector3(v[0], v[1], v[2]);
+    const allPoints = [];
+    Object.values(poseData.tracks || {}).forEach(track => {
+      (track.points || []).forEach(p => allPoints.push(vec(p)));
+    });
+    if (allPoints.length === 0) return overlay;
+    
+    const box = new THREE.Box3();
+    allPoints.forEach(p => box.expandByPoint(p));
+    const span = Math.max(0.04, box.getSize(new THREE.Vector3()).length());
+    const frustumSizeScale = 0.0625;
+    const trajectorySizeScale = 0.25;
+    const dotSizeScale = 0.25;
+    const frustumNear = span * 0.08 * frustumSizeScale;
+    const frustumDepth = span * 0.14 * frustumSizeScale;
+    const overlayRenderOrder = 10000;
+    const yAxis = new THREE.Vector3(0, 1, 0);
+    const tubeGeometry = new THREE.CylinderGeometry(1, 1, 1, 8, 1, true);
+    const markerGeometry = new THREE.SphereGeometry(1, 8, 6);
+    const presetMarkerGeometry = new THREE.SphereGeometry(1, 16, 12);
+    const trajectoryTubeRadius = Math.max(span * 0.0017 * trajectorySizeScale, 0.00018);
+    const trajectoryMarkerRadius = Math.max(span * 0.015 * 0.6 * dotSizeScale, 0.00035);
+    const presetMarkerRadius = Math.max(span * 0.015 * dotSizeScale, 0.0005);
+    const frustumTubeRadius = Math.max(span * 0.0035 * frustumSizeScale, 0.0006);
+    const presetFrustumTubeRadius = Math.max(span * 0.005 * frustumSizeScale, 0.0008);
+
+    const makeOverlayMaterial = (color, opacity = 1) => new THREE.MeshBasicMaterial({
+      color,
+      transparent: opacity < 1,
+      opacity,
+      depthTest: false,
+      depthWrite: false,
+      toneMapped: false,
+    });
+
+    const pinToOverlay = (object) => {
+      object.renderOrder = overlayRenderOrder;
+      object.frustumCulled = false;
+      return object;
+    };
+
+    const addTubeSegments = (segments, radius, material) => {
+      if (segments.length === 0) return;
+
+      const mesh = pinToOverlay(new THREE.InstancedMesh(tubeGeometry, material, segments.length));
+      const matrix = new THREE.Matrix4();
+      const midpoint = new THREE.Vector3();
+      const delta = new THREE.Vector3();
+      const quaternion = new THREE.Quaternion();
+      const scale = new THREE.Vector3();
+      let count = 0;
+
+      segments.forEach(([start, end]) => {
+        delta.copy(end).sub(start);
+        const length = delta.length();
+        if (length < 0.000001) return;
+
+        midpoint.copy(start).add(end).multiplyScalar(0.5);
+        quaternion.setFromUnitVectors(yAxis, delta.normalize());
+        scale.set(radius, length, radius);
+        matrix.compose(midpoint, quaternion, scale);
+        mesh.setMatrixAt(count, matrix);
+        count += 1;
+      });
+
+      if (count === 0) return;
+      mesh.count = count;
+      mesh.instanceMatrix.needsUpdate = true;
+      overlay.add(mesh);
+    };
+
+    const addTubePolyline = (points, color, radius, opacity) => {
+      if (points.length < 2) return;
+
+      const segments = [];
+      for (let i = 1; i < points.length; i++) {
+        segments.push([points[i - 1], points[i]]);
+      }
+      addTubeSegments(segments, radius, makeOverlayMaterial(color, opacity));
+    };
+
+    const addMarkers = (points, color, radius, opacity, geometry = markerGeometry) => {
+      if (points.length === 0) return;
+
+      const mesh = pinToOverlay(new THREE.InstancedMesh(geometry, makeOverlayMaterial(color, opacity), points.length));
+      const matrix = new THREE.Matrix4();
+      const quaternion = new THREE.Quaternion();
+      const scale = new THREE.Vector3(radius, radius, radius);
+
+      points.forEach((point, index) => {
+        matrix.compose(point, quaternion, scale);
+        mesh.setMatrixAt(index, matrix);
+      });
+
+      mesh.instanceMatrix.needsUpdate = true;
+      overlay.add(mesh);
+    };
+    
+    const getFrustumEdges = (position, lookAt, up) => {
+      // Calculate camera frame
+      const forward = lookAt.clone().sub(position);
+      if (forward.lengthSq() < 0.000001) return [];
+      forward.normalize();
+
+      let upVec = up.clone().normalize();
+      let right = new THREE.Vector3().crossVectors(forward, upVec).normalize();
+      
+      if (right.lengthSq() < 0.0001) right = new THREE.Vector3(1, 0, 0);
+      upVec = new THREE.Vector3().crossVectors(right, forward).normalize();
+      
+      // Compute frustum corners with 16:9 aspect ratio
+      const near = position.clone().add(forward.clone().multiplyScalar(frustumNear));
+      const far = position.clone().add(forward.clone().multiplyScalar(frustumDepth));
+      
+      const nearHeight = frustumNear * 0.7;
+      const farHeight = frustumDepth * 0.7;
+      
+      const n1 = near.clone().add(right.clone().multiplyScalar(nearHeight)).add(upVec.clone().multiplyScalar(nearHeight * 0.5625));
+      const n2 = near.clone().add(right.clone().multiplyScalar(-nearHeight)).add(upVec.clone().multiplyScalar(nearHeight * 0.5625));
+      const n3 = near.clone().add(right.clone().multiplyScalar(-nearHeight)).add(upVec.clone().multiplyScalar(-nearHeight * 0.5625));
+      const n4 = near.clone().add(right.clone().multiplyScalar(nearHeight)).add(upVec.clone().multiplyScalar(-nearHeight * 0.5625));
+      
+      const f1 = far.clone().add(right.clone().multiplyScalar(farHeight)).add(upVec.clone().multiplyScalar(farHeight * 0.5625));
+      const f2 = far.clone().add(right.clone().multiplyScalar(-farHeight)).add(upVec.clone().multiplyScalar(farHeight * 0.5625));
+      const f3 = far.clone().add(right.clone().multiplyScalar(-farHeight)).add(upVec.clone().multiplyScalar(-farHeight * 0.5625));
+      const f4 = far.clone().add(right.clone().multiplyScalar(farHeight)).add(upVec.clone().multiplyScalar(-farHeight * 0.5625));
+      
+      return [
+        [position, n1], [position, n2], [position, n3], [position, n4],
+        [n1, n2], [n2, n3], [n3, n4], [n4, n1],
+        [f1, f2], [f2, f3], [f3, f4], [f4, f1],
+        [n1, f1], [n2, f2], [n3, f3], [n4, f4],
+      ];
+    };
+
+    const drawFrustumEdges = (frustumEdges, color, opacity, radius = frustumTubeRadius) => {
+      if (frustumEdges.length === 0) return;
+
+      const haloMaterial = makeOverlayMaterial('#0c111e', Math.min(0.65, opacity));
+      const coreMaterial = makeOverlayMaterial(color, Math.max(0.82, opacity));
+      addTubeSegments(frustumEdges, radius * 1.9, haloMaterial);
+      addTubeSegments(frustumEdges, radius, coreMaterial);
+    };
+
+    const getTrackLookAt = (points, index, distance) => {
+      const position = points[index];
+      const prev = points[Math.max(0, index - 1)];
+      const next = points[Math.min(points.length - 1, index + 1)];
+      let direction = next.clone().sub(prev);
+
+      if (direction.lengthSq() < 0.000001) {
+        for (let offset = 1; offset < points.length; offset++) {
+          const after = points[index + offset];
+          if (after) {
+            direction = after.clone().sub(position);
+            if (direction.lengthSq() >= 0.000001) break;
+          }
+
+          const before = points[index - offset];
+          if (before) {
+            direction = position.clone().sub(before);
+            if (direction.lengthSq() >= 0.000001) break;
+          }
+        }
+      }
+
+      if (direction.lengthSq() < 0.000001) direction = new THREE.Vector3(0, 1, 0);
+      return position.clone().add(direction.normalize().multiplyScalar(distance));
+    };
+    
+    // Draw camera trajectories with frustums at each pose
+    Object.entries(poseData.tracks || {}).forEach(([key, track]) => {
+      const points = (track.points || []).map(vec);
+      if (points.length < 1) return;
+      
+      // Draw trajectory line
+      const color = track.color || '#ffffff';
+      addTubePolyline(points, color, trajectoryTubeRadius, 0.72);
+      
+      // Draw every available camera pose, not just a sparse sample.
+      const frustumEdges = [];
+      points.forEach((point, index) => {
+        const lookAtPoint = getTrackLookAt(points, index, Math.max(frustumNear * 1.5, frustumDepth));
+        if (lookAtPoint) {
+          frustumEdges.push(...getFrustumEdges(point, lookAtPoint, new THREE.Vector3(0, 0, 1)));
+        }
+      });
+      drawFrustumEdges(frustumEdges, color, 0.72);
+      addMarkers(points, color, trajectoryMarkerRadius, 0.78);
+    });
+    
+    // Draw larger frustums and markers for presets
+    Object.entries(poseData.presets || {}).forEach(([key, preset]) => {
+      if (key === 'free') return;
+      
+      const color = preset.color || '#ffffff';
+      const position = vec(preset.position);
+      const lookAt = vec(preset.lookAt);
+      const upVec = vec(preset.up || [0, 0, 1]);
+      
+      drawFrustumEdges(getFrustumEdges(position, lookAt, upVec), color, 1, presetFrustumTubeRadius);
+      addMarkers([position], color, presetMarkerRadius, 1, presetMarkerGeometry);
+    });
+    
+    return overlay;
+  },
+
+  resetCamera() {
+    if (this.viewer && this.initialCameraState) {
+      const { position, lookAt, up } = this.initialCameraState;
+      this.viewer.camController.movementControls.reset();
+    }
+  },
+
+  fail(message) {
+    const status = document.getElementById('status');
+    status.classList.add('error');
+    status.innerHTML = `<strong>Error</strong><br>${message}`;
+  },
+};
+
+// Event listeners
+document.getElementById('backBtn').addEventListener('click', () => APP.showScenes());
+document.getElementById('homeBtn').addEventListener('click', () => APP.resetCamera());
+
+document.getElementById('cameraSelect').addEventListener('change', (e) => {
+  APP.currentCam = e.target.value;
+  APP.loadScene();
+});
+
+// Initialize on load
+APP.init();
+</script>
+
+</body>
+</html>

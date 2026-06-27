@@ -1,0 +1,7 @@
+{
+  "scene": "seq37",
+  "source": "/scratch/sanjay/3dgs_car/3dgs_refine_poses/seq37/splat_pose_refine_seq37/splatfacto/2026-04-19_021002/nerfstudio_models/step-000029999.ckpt",
+  "format": "3DGS PLY",
+  "splats": 400000,
+  "selection": "top 400000 finite splats by opacity, reduced for GitHub file size limit"
+}

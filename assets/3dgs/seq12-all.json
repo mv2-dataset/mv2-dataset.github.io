@@ -1,0 +1,7 @@
+{
+  "scene": "seq12",
+  "source": "/scratch/sanjay/3dgs_car/3dgs_refine_poses/seq12/splat_pose_refine_seq12/splatfacto/2026-04-18_214028/nerfstudio_models/step-000029999.ckpt",
+  "format": "3DGS PLY",
+  "splats": 394475,
+  "selection": "all finite splats with opacity >= 1/255"
+}
