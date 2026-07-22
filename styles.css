@@ -1,26 +1,75 @@
 /* ====== Multi-Agent Cross-View 3D Benchmark — Academic template ====== */
+@font-face {
+  font-family: "Computer Modern Serif";
+  src: url("assets/fonts/cmunrm.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Computer Modern Serif";
+  src: url("assets/fonts/cmunbx.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Computer Modern Serif";
+  src: url("assets/fonts/cmunsl.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "CMU Typewriter";
+  src: url("assets/fonts/cmuntt.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "TWK Lausanne";
+  src: url("assets/fonts/twk200.woff2") format("woff2");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "TWK Lausanne";
+  src: url("assets/fonts/twk200i.woff2") format("woff2");
+  font-weight: 200;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "TWK Lausanne";
+  src: url("assets/fonts/twk500.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
 :root {
-  --bg: #0b1020;
-  --bg-alt: #11182b;
-  --bg-soft: #151f36;
-  --ink: #f4f0e8;
-  --ink-2: #d8deea;
-  --ink-3: #a7b3c8;
-  --ink-4: #71809a;
-  --rule: #27334d;
-  --rule-2: #3b4b6b;
-  --accent: #e5a84b;
-  --accent-2: #69d0cf;
-  --accent-soft: #202d49;
-  --accent-ink: #0d172b;
-  --warn: #e5a84b;
+  --bg: #ffffff;
+  --bg-alt: #f8f8f8;
+  --bg-soft: #f1f1f1;
+  --ink: #333333;
+  --ink-2: #555555;
+  --ink-3: #888888;
+  --ink-4: #aaaaaa;
+  --rule: #eeeeee;
+  --rule-2: #cccccc;
+  --accent: #333333;
+  --accent-2: #888888;
+  --accent-soft: #f1f1f1;
+  --accent-ink: #ffffff;
+  --warn: #888888;
   --good: #55c98a;
   --bad: #ec7b72;
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.18);
-  --shadow-md: 0 10px 28px rgba(0, 0, 0, 0.22);
-  --font-sans: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-display: "Raleway", "Open Sans", sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
+  --font-sans: "TWK Lausanne", sans-serif;
+  --font-display: "Computer Modern Serif", serif;
+  --font-mono: "CMU Typewriter", monospace;
 }
 
 * { box-sizing: border-box; }
@@ -31,18 +80,18 @@ body {
   font-family: var(--font-sans);
   background: var(--bg);
   color: var(--ink-2);
-  font-size: 15px;
-  line-height: 1.65;
+  font-size: 16px;
+  font-weight: 200;
+  line-height: 1.4;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  background-image: linear-gradient(rgba(105, 208, 207, .035) 1px, transparent 1px), linear-gradient(90deg, rgba(105, 208, 207, .035) 1px, transparent 1px);
-  background-size: 48px 48px;
+  background-image: none;
 }
 
 a { color: var(--accent); text-decoration: none; }
 a:hover { color: var(--accent-2); }
 
-h1, h2, h3, h4, h5 { font-family: var(--font-display); color: var(--ink); font-weight: 600; letter-spacing: -0.01em; }
+h1, h2, h3, h4, h5 { font-family: var(--font-display); color: var(--ink); font-weight: 400; letter-spacing: 0; }
 
 /* ============== TOP HEADER ============== */
 .site-header {
@@ -1817,4 +1866,244 @@ h1, h2, h3, h4, h5 { font-family: var(--font-display); color: var(--ink); font-w
   .bench-toolbar input[type=text] { width: 120px; }
   .cmp-table { font-size: 12px; }
   .cmp-table thead th, .cmp-table tbody td { padding: 8px 10px; }
+}
+
+/* ============== DO AS I DO–INSPIRED LIGHT THEME ============== */
+.site-header {
+  background: rgba(255, 255, 255, .94);
+  border-bottom-color: var(--rule);
+  backdrop-filter: blur(8px);
+}
+.site-header-inner,
+.hero-inner,
+.wrap { max-width: 1024px; }
+.affil-logo { border-radius: 4px; }
+.affil-logo:hover { background: var(--bg-alt); }
+.header-links { gap: 4px; }
+.header-link {
+  padding: 7px 12px;
+  font-weight: 200;
+  color: var(--ink-3);
+  border: 0;
+  border-radius: 999px;
+  background: var(--bg-alt);
+}
+.header-link:hover,
+.header-link.browse,
+.header-link.browse:hover {
+  background: var(--ink);
+  color: #fff;
+  border-color: transparent;
+}
+
+.hero {
+  padding: 54px 0 52px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--rule);
+}
+.hero-inner { gap: 48px; }
+.hero-copy { max-width: 620px; }
+.hero-acronym {
+  margin-bottom: 14px;
+  padding: 0;
+  color: var(--ink-3);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: .08em;
+}
+.hero h1 {
+  margin-bottom: 14px;
+  color: var(--ink);
+  font-size: 44px;
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: 0;
+}
+.hero-tagline {
+  margin-bottom: 18px;
+  color: var(--ink-2);
+  font-size: 16px;
+  line-height: 1.45;
+}
+.hero-authors {
+  margin-bottom: 8px;
+  color: var(--ink-3);
+  font-size: 15px;
+  line-height: 1.55;
+}
+.hero-authors a {
+  color: var(--ink-3);
+  font-weight: 200;
+}
+.hero-authors a:hover { color: var(--ink); }
+.hero-affiliations { gap: 1px; margin-bottom: 20px; }
+.hero-affil { color: var(--ink-3); font-size: 13px; line-height: 1.35; }
+.hero-visual img {
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  box-shadow: none;
+  transition: transform .2s ease-in-out;
+}
+.hero-visual img:hover { transform: scale(1.02); }
+.hero-visual figcaption {
+  margin: 10px 14px 0;
+  color: var(--ink-3);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 200;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.hero-visual figcaption span:last-child { color: var(--ink-3); }
+.hero-actions { gap: 8px; }
+.hero-explore,
+.hero-explore-secondary {
+  min-height: 0;
+  padding: 8px 16px;
+  color: var(--ink-3);
+  background: var(--bg-soft);
+  border: 0;
+  border-radius: 999px;
+  font-weight: 200;
+  box-shadow: none;
+}
+.hero-explore:not(.hero-explore-secondary) { color: var(--ink-3); }
+.hero-explore:hover,
+.hero-explore-secondary:hover,
+.hero-explore:not(.hero-explore-secondary):hover {
+  color: #fff;
+  background: var(--ink);
+  border-color: transparent;
+  transform: none;
+}
+
+.tldr-strip,
+.section-alt,
+.samples-section,
+.snapshot-section,
+.site-footer { background: var(--bg); color: var(--ink-2); }
+.tldr-strip { border-bottom: 1px solid var(--rule); }
+.tldr-cell { border-color: var(--rule); }
+.tldr-num,
+.snapshot-section .section-title,
+.snapshot-card strong { color: var(--ink); }
+.tldr-lab,
+.tldr-help,
+.snapshot-lede,
+.snapshot-card p { color: var(--ink-3); }
+.snapshot-section .eyebrow,
+.snapshot-kicker { color: var(--ink-3); }
+.snapshot-card,
+.snapshot-card-accent {
+  color: var(--ink-2);
+  background: var(--bg-alt);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+}
+.snapshot-section .section-title::after { background: var(--rule); }
+
+.section { padding-top: 48px; padding-bottom: 48px; }
+.section-title {
+  color: var(--ink);
+  font-size: 29px;
+  font-weight: 400;
+}
+.section-title::after {
+  width: auto;
+  height: 0;
+  flex: 1;
+  margin-left: 10px;
+  background: transparent;
+  border-top: 2px solid var(--rule);
+}
+.section-sub { color: var(--ink-3); }
+
+.card,
+.pipeline-step,
+.metric-card,
+.eval-card,
+.split-card,
+.viewer-shell,
+.scene-selector,
+.bench-card,
+.sample-tile,
+.dataset-card {
+  background: var(--bg);
+  border-color: var(--rule);
+  border-radius: 4px;
+  box-shadow: none;
+}
+.card:hover {
+  border-color: var(--rule-2);
+  box-shadow: none;
+  transform: none;
+}
+.chip,
+.pipeline-num,
+.tag,
+.samples-tab,
+.viewer-tab,
+.viewer-cam {
+  border-radius: 999px;
+}
+.samples-tab.active,
+.viewer-tab.active,
+.viewer-cam.active,
+.pipeline-num {
+  color: #fff;
+  background: var(--ink);
+}
+.samples-toolbar,
+.viewer-topbar,
+.bench-toolbar,
+.split-card-summary { background: var(--bg-alt); }
+.sample-frame,
+.viewer-stage { background: var(--bg-soft); }
+
+.bibtex-block,
+.code-block,
+pre,
+code { font-family: var(--font-mono); }
+.bibtex-block,
+.code-block,
+pre { background: var(--bg-alt); color: var(--ink-2); }
+.contact-cta {
+  color: var(--ink-3);
+  background: var(--bg-soft);
+  border-radius: 999px;
+}
+.contact-cta:hover { color: #fff; background: var(--ink); transform: none; }
+.footer-meta,
+.footer-links a { color: var(--ink-3); }
+.citation-block {
+  color: var(--ink-2);
+  background: var(--bg-alt);
+  border-color: var(--rule);
+  border-radius: 4px;
+}
+.citation-block .at,
+.citation-block .key,
+.citation-block .val { color: var(--ink-2); }
+.copy-btn {
+  color: var(--ink-3);
+  background: var(--bg-soft);
+  border-color: var(--rule);
+}
+.copy-btn:hover { color: #fff; background: var(--ink); }
+.finding-tag { background: var(--bg-alt); }
+.footer {
+  color: var(--ink-3);
+  background: var(--bg);
+  border-top: 1px solid var(--rule);
+}
+.footer-cc,
+.footer-meta,
+.footer-meta a { color: var(--ink-3); }
+.footer-cc-icon {
+  color: #fff;
+  background: var(--ink);
 }
