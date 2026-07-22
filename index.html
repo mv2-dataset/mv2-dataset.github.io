@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Raleway:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=4">
+  <link rel="stylesheet" href="styles.css?v=5">
 </head>
 <body>
 
@@ -15,28 +15,19 @@
   <div class="site-header-inner">
     <div class="affil-logos">
       <a class="affil-logo" href="https://www.iiit.ac.in/" target="_blank" rel="noopener" title="IIIT Hyderabad">
-        <svg viewBox="0 0 140 36" width="140" height="36" xmlns="http://www.w3.org/2000/svg">
-          <rect x="2" y="6" width="24" height="24" rx="3" fill="#2c5fb8"/>
-          <text x="14" y="23" text-anchor="middle" font-family="Raleway" font-size="11" font-weight="700" fill="white">IIIT</text>
-          <text x="32" y="17" font-family="Raleway" font-size="11" font-weight="700" fill="#1a1f2e">IIIT Hyderabad</text>
-          <text x="32" y="29" font-family="Open Sans" font-size="8" fill="#5a6378">Centre for Visual Information Technology</text>
-        </svg>
+        <img src="assets/iiit-hyderabad-logo.png" alt="IIIT Hyderabad" />
       </a>
       <a class="affil-logo" href="https://cvit.iiit.ac.in/" target="_blank" rel="noopener" title="CVIT">
-        <svg viewBox="0 0 90 36" width="90" height="36" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="14" cy="18" r="11" fill="none" stroke="#2c5fb8" stroke-width="2"/>
-          <circle cx="14" cy="18" r="4" fill="#2c5fb8"/>
-          <text x="30" y="17" font-family="Raleway" font-size="11" font-weight="700" fill="#1a1f2e">CVIT</text>
-          <text x="30" y="29" font-family="Open Sans" font-size="8" fill="#5a6378">Vision &amp; Graphics</text>
-        </svg>
+        <img src="assets/cvit-logo.png" alt="Centre for Visual Information Technology" />
       </a>
     </div>
 
     <div class="site-header-spacer"></div>
 
     <nav class="header-links">
-      <a class="header-link" href="#about">Paper</a>
-      <a class="header-link" href="https://www.kaggle.com/datasets/sanjaybhargav810/mv2-dataset" target="_blank" rel="noopener">Dataset</a>
+      <a class="header-link" href="https://cvit.iiit.ac.in/images/ConferencePapers/2026_01/virtual_drive_2026.pdf" target="_blank" rel="noopener">Paper</a>
+      <!-- <a class="header-link" href="https://www.kaggle.com/datasets/sanjaybhargav810/mv2-dataset" target="_blank" rel="noopener">Dataset</a> -->
+      <a class="header-link hf-link" href="https://huggingface.co/datasets/sanjay810/mv2-dataset" target="_blank" rel="noopener" title="Download MV2 from Hugging Face"><span class="hf-symbol" aria-hidden="true">🤗</span> Hugging Face</a>
       <a class="header-link" href="https://github.com/sanjay-810/MV2dataset" target="_blank" rel="noopener">Code</a>
       <a class="header-link" href="3dgs-demo.html">Demo</a>
       <a class="header-link browse" href="#benchmark">Benchmark</a>
@@ -46,18 +37,23 @@
 
 <section class="hero">
   <div class="hero-inner">
-    <span class="hero-acronym">MV<sup>2</sup></span>
-    <h1>Multi-View Multi-Vehicle Driving Dataset <span class="light">for Novel View Synthesis</span></h1>
-    <p class="hero-tagline">A real-world benchmark for evaluating novel view synthesis under large viewpoint changes in dynamic driving scenes. MV<sup>2</sup> records the same outdoor scene from a car, a two-wheeler, and a drone, enabling train-on-one-platform and test-on-another evaluation.</p>
-    <p class="hero-authors">Sanjay Bhargav Dharavath · Hanvitha Saraswathi Mukkamala · Faizan Farooq Khan · Ioannis Kakogeorgiou · Aditya Arun · Zakaria Laskar · C.V. Jawahar</p>
-    <p class="hero-affil">Centre for Visual Information Technology, IIIT Hyderabad</p>
+    <div class="hero-copy">
+      <span class="hero-acronym">MV<sup>2</sup> / DATASET + BENCHMARK</span>
+      <h1>MV<sup>2</sup>: Multi-View Multi-Vehicle Driving Dataset for Novel View Synthesis</h1>
+      <p class="hero-tagline">A real-world benchmark for evaluating novel view synthesis under large viewpoint changes in dynamic driving scenes. MV<sup>2</sup> records the same outdoor scene from a car, a two-wheeler, and a drone, enabling train-on-one-platform and test-on-another evaluation.</p>
+      <p class="hero-authors"><a href="https://sanjay-810.github.io/" target="_blank" rel="noopener">Sanjay Bhargav Dharavath</a> · <a href="https://scholar.google.com/citations?user=nx69V3AAAAAJ&hl=en" target="_blank" rel="noopener">Hanvitha Saraswathi Mukkamala</a> · <a href="https://faixan-khan.github.io/" target="_blank" rel="noopener">Faizan Farooq Khan</a> · <a href="https://users.iit.demokritos.gr/~i.kakogeorgiou/" target="_blank" rel="noopener">Ioannis Kakogeorgiou</a> · <a href="https://adityaarun1.github.io/" target="_blank" rel="noopener">Aditya Arun</a> · <a href="https://www.iiit.ac.in/faculty/jawahar-c-v/" target="_blank" rel="noopener">C.V. Jawahar</a> · <a href="https://scholar.google.com/citations?hl=en&user=kd3XIUkAAAAJ" target="_blank" rel="noopener">Zakaria Laskar</a></p>
+      <p class="hero-affil">Centre for Visual Information Technology, IIIT Hyderabad</p>
 
-    <div class="hero-actions">
-      <!-- <a class="hero-explore" href="#about">Overview</a> -->
-      <a class="hero-explore hero-explore-secondary" href="https://www.kaggle.com/datasets/sanjaybhargav810/mv2-dataset" target="_blank" rel="noopener">Dataset</a>
-      <a class="hero-explore hero-explore-secondary" href="https://github.com/sanjay-810/MV2dataset" target="_blank" rel="noopener">GitHub</a>
-      <a class="hero-explore hero-explore-secondary" href="3dgs-demo.html">Demo</a>
+      <div class="hero-actions">
+        <a class="hero-explore" href="#about">Explore the benchmark</a>
+        <a class="hero-explore hero-explore-secondary hf-button" href="https://huggingface.co/datasets/sanjay810/mv2-dataset" target="_blank" rel="noopener"><span class="hf-symbol" aria-hidden="true">🤗</span> Download dataset</a>
+        <a class="hero-explore hero-explore-secondary" href="3dgs-demo.html">View demo</a>
+      </div>
     </div>
+    <figure class="hero-visual">
+      <img src="assets/mv2-overview.png" alt="MV2 dataset overview showing car, two-wheeler, and drone viewpoints for novel view synthesis" />
+      <figcaption><span>MV² / dataset overview</span><span>car · two-wheeler · drone</span></figcaption>
+    </figure>
   </div>
 </section>
 
@@ -67,12 +63,12 @@
       <div class="tldr-cell">
         <div class="tldr-num">50</div>
         <div class="tldr-lab">Pose-verified scenes</div>
-        <div class="tldr-help">retained from 200 recorded sequences</div>
+        <div class="tldr-help">retained from 200 recorded scenes</div>
       </div>
       <div class="tldr-cell">
-        <div class="tldr-num">12K</div>
-        <div class="tldr-lab">Calibrated images</div>
-        <div class="tldr-help">1080×1920 · 60 FPS · sampled to 2 FPS</div>
+        <div class="tldr-num">12,000</div>
+        <div class="tldr-lab">Registered images</div>
+        <div class="tldr-help">1080×1920 · sampled from 60 FPS at 2 FPS</div>
       </div>
       <div class="tldr-cell">
         <div class="tldr-num">3</div>
@@ -84,6 +80,40 @@
         <div class="tldr-lab">Evaluation setups</div>
         <div class="tldr-help">Eval-Car-Train and Eval-Drone-Train</div>
       </div>
+    </div>
+  </div>
+</section>
+
+<section class="section snapshot-section" id="snapshot">
+  <div class="wrap">
+    <div class="snapshot-intro">
+      <div>
+        <span class="eyebrow">Paper snapshot</span>
+        <h2 class="section-title section-title-left">A benchmark built for viewpoint gaps</h2>
+      </div>
+      <p class="snapshot-lede">MV<sup>2</sup> captures synchronized dynamic urban scenes from independent ground and aerial trajectories, then tests whether a model can render views it never saw during training.</p>
+    </div>
+    <div class="snapshot-grid">
+      <article class="snapshot-card">
+        <span class="snapshot-kicker">Capture</span>
+        <strong>2 hours · 5 days</strong>
+        <p>GoPro 10 sensors on a car, scooty, and drone follow adjacent trajectories across urban and semi-urban roads, producing five camera sequences per recorded scene.</p>
+      </article>
+      <article class="snapshot-card">
+        <span class="snapshot-kicker">Registration</span>
+        <strong>COLMAP + manual checks</strong>
+        <p>All views share one coordinate frame. A sequence is retained only when the maximum epipolar error is at most 30 pixels.</p>
+      </article>
+      <article class="snapshot-card snapshot-card-accent">
+        <span class="snapshot-kicker">Best reported result</span>
+        <strong>PVG · 27.01 dB</strong>
+        <p>Eval-Car-Train on T<sub>C→C</sub>: 27.01 PSNR, 0.72 SSIM, and 0.20 LPIPS.</p>
+      </article>
+      <article class="snapshot-card">
+        <span class="snapshot-kicker">Hardest direction</span>
+        <strong>Drone → ground</strong>
+        <p>On T<sub>D→C</sub>, PVG reaches 12.65 PSNR, showing the cost of the aerial-to-ground viewpoint gap.</p>
+      </article>
     </div>
   </div>
 </section>
@@ -172,7 +202,7 @@
         <div class="pipeline-num">2</div>
         <h4>Segment</h4>
         <p>Videos are sampled at 2 FPS and split into 100-frame segments. Congested, tunnel, red-light, and poorly aligned segments are removed.</p>
-        <div class="pipeline-meta">200 candidates</div>
+        <div class="pipeline-meta">200 scenes recorded</div>
       </div>
       <div class="pipeline-step">
         <div class="pipeline-num">3</div>
@@ -184,7 +214,7 @@
         <div class="pipeline-num">4</div>
         <h4>Verify</h4>
         <p>Relative poses are accepted only when the maximum epipolar error over annotated correspondences is at most 30 pixels.</p>
-        <div class="pipeline-meta">50 final scenes</div>
+        <div class="pipeline-meta">50 scenes retained</div>
       </div>
     </div>
   </div>
