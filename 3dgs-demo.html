@@ -5,6 +5,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MV² 3DGS Viewer - Interactive Demo</title>
 <style>
+  @font-face {
+    font-family: "Computer Modern Serif";
+    src: url("assets/fonts/cmunrm.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "TWK Lausanne";
+    src: url("assets/fonts/twk200.woff2") format("woff2");
+    font-weight: 200;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "TWK Lausanne";
+    src: url("assets/fonts/twk500.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
   * { box-sizing: border-box; }
   html, body {
     width: 100%;
@@ -258,7 +279,6 @@
     backdrop-filter: blur(8px);
     transition: all 0.2s;
   }
-  
   .control-btn:hover {
     background: rgba(14, 20, 34, 0.95);
     border-color: rgba(120, 167, 255, 0.5);
@@ -342,6 +362,120 @@
     h1 { font-size: 1.4em; }
     .scenes-grid { grid-template-columns: 1fr; }
     .content { padding: 20px; }
+  }
+
+  /* Match the main site and the Do as I Do academic theme. */
+  html, body {
+    background: #fff;
+    color: #333;
+    font-family: "TWK Lausanne", sans-serif;
+    font-weight: 200;
+    line-height: 1.4;
+  }
+  header {
+    padding: 28px 24px 22px;
+    background: rgba(255, 255, 255, .94);
+    border-bottom: 1px solid #eee;
+    backdrop-filter: blur(8px);
+  }
+  h1,
+  .scene-title {
+    font-family: "Computer Modern Serif", serif;
+    font-weight: 400;
+  }
+  h1 {
+    color: #333;
+    background: none;
+    -webkit-text-fill-color: currentColor;
+  }
+  .tagline,
+  .scene-desc { color: #888; }
+  .content { padding: 40px 24px 76px; }
+  .scenes-grid {
+    max-width: 960px;
+    gap: 16px;
+  }
+  .scene-card {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    transition: border-color .2s ease-in-out, transform .2s ease-in-out;
+  }
+  .scene-card:hover {
+    background: #fff;
+    border-color: #ccc;
+    box-shadow: none;
+    transform: scale(1.01);
+  }
+  .scene-preview {
+    color: #333;
+    background: #f8f8f8;
+    border-bottom: 1px solid #eee;
+  }
+  .scene-title { color: #333; }
+  .camera-tag {
+    padding: 4px 10px;
+    color: #888;
+    background: #f1f1f1;
+    border: 0;
+    border-radius: 999px;
+    font-weight: 200;
+  }
+  .btn {
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-family: inherit;
+    font-weight: 200;
+  }
+  .btn-primary,
+  .btn-secondary {
+    color: #888;
+    background: #f1f1f1;
+    border: 0;
+  }
+  .btn-primary:hover,
+  .btn-secondary:hover {
+    color: #fff;
+    background: #333;
+    box-shadow: none;
+    transform: none;
+  }
+  footer {
+    color: #888;
+    background: rgba(255, 255, 255, .94);
+    border-top: 1px solid #eee;
+    backdrop-filter: blur(8px);
+  }
+
+  /* The canvas stays dark; its floating controls use the same neutral pills. */
+  .viewer-page { background: #0c111e; }
+  .pill,
+  .status,
+  .camera-selector,
+  .control-btn {
+    color: #555;
+    background: rgba(255, 255, 255, .9);
+    border: 1px solid rgba(255, 255, 255, .7);
+    border-radius: 999px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, .1);
+    font-family: inherit;
+    font-weight: 200;
+  }
+  .status { border-radius: 4px; }
+  .status strong { color: #333; font-weight: 500; }
+  .control-btn { color: #555; }
+  .control-btn:hover {
+    color: #fff;
+    background: #333;
+    border-color: #333;
+  }
+  .camera-selector { border-radius: 4px; overflow: hidden; }
+  .camera-selector label { color: #888; font-weight: 200; }
+  .camera-selector select {
+    color: #333;
+    background: #f8f8f8;
+    border-top-color: #eee;
+    font-family: inherit;
   }
 </style>
 </head>
