@@ -199,7 +199,19 @@ h1, h2, h3, h4, h5 { font-family: var(--font-display); color: var(--ink); font-w
   font-size: 13.5px;
   color: var(--ink-3);
   font-style: italic;
-  margin: 0 auto 32px;
+  margin: 0;
+  line-height: 1.45;
+}
+.hero-affiliations {
+  display: grid;
+  gap: 3px;
+  margin: 0 0 26px;
+}
+.hero-affil sup,
+.hero-authors sup {
+  margin-left: 1px;
+  font-size: .7em;
+  line-height: 0;
 }
 .hero-explore {
   display: inline-flex;
